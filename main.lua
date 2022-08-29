@@ -48,6 +48,9 @@ function love.update(dt)
     Bird.Speed = Bird.Speed + (200 * dt)
     Bird.Y = Bird.Y + (Bird.Speed * dt)
 
+    -- 땅에 닿으면 재시작
+    if (Bird.Y >= ConfigMgr.window.height) then GameReset() end
+
     -- 파이프 이동
     for i=1, #Pipe do
         -- 좌로 이동
@@ -60,17 +63,13 @@ function love.update(dt)
             Pipe[i].Y = love.math.random(50, ConfigMgr.window.height - Pipe[i].Height - 50)
             ScoreFlag = false
         end
-    end
 
-    -- 파이프 충돌 처리
-    for i=1, #Pipe do
+        -- 파이프 충돌 처리
         if (CheckAABBCollision(Bird, Pipe[i])) then
             GameReset()
         end
-    end
 
-    -- 점수 증가
-    for i=1, #Pipe do
+        -- 점수 증가
         if (Bird.X > (Pipe[i].X + Pipe[i].Width)) then
             if (ScoreFlag == false) then
                 Score = Score + 1
